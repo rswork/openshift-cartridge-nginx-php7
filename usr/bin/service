@@ -37,7 +37,13 @@ function php-fpm_start() {
     
     if [ ! -f $PHP_FPM_PID_FILE ]; then    
         php-fpm -g ${PHP_FPM_PID_FILE} -y ${PHP_FPM_CONFIG_FILE} -D
-        echo "php-fpm has started"
+
+        if [ -f "$PHP_FPM_PID_FILE" ]; then
+            pid=`cat "$PHP_FPM_PID_FILE" 2>/dev/null`
+            echo "php-fpm has started, pid: $pid"
+        else
+            echo "php-fpm not started, please check"
+        fi
     else
         echo "php-fpm is already running"
     fi
@@ -62,7 +68,12 @@ function nginx_start() {
     if [ ! -f $NGINX_PID_FILE ]; then
         nginx -c ${NGINX_CONFIG_FILE} >> $OPENSHIFT_PHP_LOG_DIR/nginx/stdout.log 2>&1
 
-        echo "nginx has started"
+        if [ -f "$NGINX_PID_FILE" ]; then
+            pid=`cat "$NGINX_PID_FILE" 2>/dev/null`
+            echo "nginx has started, pid: $pid"
+        else
+            echo "nginx not started, please check"
+        fi
     else
         echo "nginx is already running"
     fi

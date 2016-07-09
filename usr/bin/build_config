@@ -15,3 +15,7 @@ _run_template ${OPENSHIFT_REPO_DIR}/config/nginx.d/*.erb
 
 echo "Building php-fpm configuration..."
 _run_template ${OPENSHIFT_REPO_DIR}/config/php.d/*.erb
+
+echo "Testing..."
+service nginx configtest
+service php-fpm configtest
